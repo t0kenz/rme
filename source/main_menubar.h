@@ -31,6 +31,7 @@ namespace MenuBar
 		NEW,
 		OPEN,
 		SAVE,
+		//SAVE_SPAWNS,
 		SAVE_AS,
 		GENERATE_MAP,
 		CLOSE,
@@ -67,6 +68,7 @@ namespace MenuBar
 		RANDOMIZE_MAP,
 		GOTO_PREVIOUS_POSITION,
 		GOTO_POSITION,
+		JUMP_TO_POSITION,
 		JUMP_TO_BRUSH,
 		JUMP_TO_ITEM_BRUSH,
 		CLEAR_INVALID_HOUSES,
@@ -175,6 +177,7 @@ public:
 	void OnGenerateMap(wxCommandEvent& event);
 	void OnOpenRecent(wxCommandEvent& event);
 	void OnSave(wxCommandEvent& event);
+	//void OnSaveSpawns(wxCommandEvent& event);
 	void OnSaveAs(wxCommandEvent& event);
 	void OnClose(wxCommandEvent& event);
 	void OnPreferences(wxCommandEvent& event);
@@ -199,6 +202,7 @@ public:
 	void OnJumpToItemBrush(wxCommandEvent& event);
 	void OnGotoPreviousPosition(wxCommandEvent& event);
 	void OnGotoPosition(wxCommandEvent& event);
+	void OnJumpToPosition(wxCommandEvent& event);
 	void OnMapRemoveItems(wxCommandEvent& event);
 	void OnMapRemoveCorpses(wxCommandEvent& event);
 	void OnMapRemoveUnreachable(wxCommandEvent& event);

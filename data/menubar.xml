@@ -4,6 +4,7 @@
         <item name="$New..." hotkey="Ctrl+N" action="NEW" help="Create a new map."/>
         <item name="$Open..." hotkey="Ctrl+O" action="OPEN" help="Open another map."/>
         <item name="$Save" hotkey="Ctrl+S" action="SAVE" help="Save the current map."/>
+        <!--<item name="$Save Spawns" hotkey="CTRL+SHIFT+S" action="SAVE_SPAWNS" help="Saves the current spawn file."/> -->
         <item name="Save $As..." hotkey="Ctrl+Alt+S" action="SAVE_AS" help="Save the current map as a new file."/>
         <item name="$Generate Map" action="GENERATE_MAP" help="Generate a new map."/>
         <item name="$Close" hotkey="Ctrl+Q" action="CLOSE" help="Closes the currently open map."/>
@@ -72,6 +73,7 @@
         <separator/>
         <item name="Go To P$revious Position" hotkey="P" action="GOTO_PREVIOUS_POSITION" help="Go to the previous screen center position."/>
         <item name="$Go To Position..." hotkey="Ctrl+G" action="GOTO_POSITION" help="Go to a specific XYZ position."/>
+        <item name="$Jump To Position" hotkey="CTRL+SHIFT+V" action="JUMP_TO_POSITION" help="Jumps directly to a specific XYZ position taken from the clipboard."/>
         <item name="$Jump to Brush..." hotkey="J" action="JUMP_TO_BRUSH" help="Jump to a brush."/>
         <item name="Jump to $Item..." hotkey="Ctrl+J" action="JUMP_TO_ITEM_BRUSH" help="Jump to an item brush (RAW palette)."/>
         <separator/>
