@@ -31,6 +31,9 @@ namespace MenuBar
 		NEW,
 		OPEN,
 		SAVE,
+		SAVE_MAP,
+		SAVE_SPAWNS,
+		SAVE_HOUSES,
 		SAVE_AS,
 		GENERATE_MAP,
 		CLOSE,
@@ -175,6 +178,11 @@ public:
 	void OnGenerateMap(wxCommandEvent& event);
 	void OnOpenRecent(wxCommandEvent& event);
 	void OnSave(wxCommandEvent& event);
+	
+	void OnSaveMap(wxCommandEvent& event);
+	void OnSaveSpawns(wxCommandEvent& event);
+	void OnSaveHouses(wxCommandEvent& event);
+
 	void OnSaveAs(wxCommandEvent& event);
 	void OnClose(wxCommandEvent& event);
 	void OnPreferences(wxCommandEvent& event);

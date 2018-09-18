@@ -3,7 +3,12 @@
     <menu name="$File">
         <item name="$New..." hotkey="Ctrl+N" action="NEW" help="Create a new map."/>
         <item name="$Open..." hotkey="Ctrl+O" action="OPEN" help="Open another map."/>
-        <item name="$Save" hotkey="Ctrl+S" action="SAVE" help="Save the current map."/>
+        <item name="$Save" hotkey="Ctrl+S" action="SAVE" help="Save the current map, houses and spawns."/>
+
+        <item name="$Save Map" action="SAVE_MAP" help="Save the current map." />
+        <item name="$Save Spawns" action="SAVE_SPAWNS" help="Save current spawns." />
+        <item name="$Save Houses" action="SAVE_HOUSES" help="Save current houses" />
+
         <item name="Save $As..." hotkey="Ctrl+Alt+S" action="SAVE_AS" help="Save the current map as a new file."/>
         <item name="$Generate Map" action="GENERATE_MAP" help="Generate a new map."/>
         <item name="$Close" hotkey="Ctrl+Q" action="CLOSE" help="Closes the currently open map."/>

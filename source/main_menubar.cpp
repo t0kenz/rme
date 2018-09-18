@@ -59,6 +59,11 @@ MainMenuBar::MainMenuBar(MainFrame *frame) : frame(frame)
 	MAKE_ACTION(NEW, wxITEM_NORMAL, OnNew);
 	MAKE_ACTION(OPEN, wxITEM_NORMAL, OnOpen);
 	MAKE_ACTION(SAVE, wxITEM_NORMAL, OnSave);
+	
+	MAKE_ACTION(SAVE_MAP, wxITEM_NORMAL, OnSaveMap);
+	MAKE_ACTION(SAVE_SPAWNS, wxITEM_NORMAL, OnSaveSpawns);
+	MAKE_ACTION(SAVE_HOUSES, wxITEM_NORMAL, OnSaveHouses);
+
 	MAKE_ACTION(SAVE_AS, wxITEM_NORMAL, OnSaveAs);
 	MAKE_ACTION(GENERATE_MAP, wxITEM_NORMAL, OnGenerateMap);
 	MAKE_ACTION(CLOSE, wxITEM_NORMAL, OnClose);
@@ -291,6 +296,11 @@ void MainMenuBar::Update()
 
 	EnableItem(CLOSE, is_local);
 	EnableItem(SAVE, is_host);
+	
+	EnableItem(SAVE_MAP, is_local);
+	EnableItem(SAVE_SPAWNS, is_local);
+	EnableItem(SAVE_HOUSES, is_local);
+
 	EnableItem(SAVE_AS, is_host);
 	EnableItem(GENERATE_MAP, false);
 
@@ -696,6 +706,27 @@ void MainMenuBar::OnSave(wxCommandEvent& WXUNUSED(event))
 		if(ok == wxID_OK)
 			g_gui.SaveCurrentMap(file.GetPath(), true);
 	}
+}
+
+void MainMenuBar::OnSaveMap(wxCommandEvent& WXUNUSED(event))
+{
+	if(!g_gui.IsEditorOpen())
+		return;
+
+}
+
+void MainMenuBar::OnSaveSpawns(wxCommandEvent& WXUNUSED(event))
+{
+	if(!g_gui.IsEditorOpen())
+	return;
+
+}
+
+void MainMenuBar::OnSaveHouses(wxCommandEvent& WXUNUSED(event))
+{
+	if(!g_gui.IsEditorOpen())
+		return;
+	
 }
 
 void MainMenuBar::OnSaveAs(wxCommandEvent& WXUNUSED(event))
