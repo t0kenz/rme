@@ -59,15 +59,11 @@ MainMenuBar::MainMenuBar(MainFrame *frame) : frame(frame)
 	MAKE_ACTION(NEW, wxITEM_NORMAL, OnNew);
 	MAKE_ACTION(OPEN, wxITEM_NORMAL, OnOpen);
 	MAKE_ACTION(SAVE, wxITEM_NORMAL, OnSave);
-<<<<<<< HEAD
 	
 	MAKE_ACTION(SAVE_MAP, wxITEM_NORMAL, OnSaveMap);
 	MAKE_ACTION(SAVE_SPAWNS, wxITEM_NORMAL, OnSaveSpawns);
 	MAKE_ACTION(SAVE_HOUSES, wxITEM_NORMAL, OnSaveHouses);
 
-=======
-	//MAKE_ACTION(SAVE_SPAWNS, wxITEM_NORMAL, OnSaveSpawns);
->>>>>>> c6aec5a9533994a197686de5a19a88e6f295d84a
 	MAKE_ACTION(SAVE_AS, wxITEM_NORMAL, OnSaveAs);
 	MAKE_ACTION(GENERATE_MAP, wxITEM_NORMAL, OnGenerateMap);
 	MAKE_ACTION(CLOSE, wxITEM_NORMAL, OnClose);
@@ -301,15 +297,11 @@ void MainMenuBar::Update()
 
 	EnableItem(CLOSE, is_local);
 	EnableItem(SAVE, is_host);
-<<<<<<< HEAD
 	
 	EnableItem(SAVE_MAP, is_local);
 	EnableItem(SAVE_SPAWNS, is_local);
 	EnableItem(SAVE_HOUSES, is_local);
 
-=======
-	//EnableItem(SAVE_SPAWNS, is_host);
->>>>>>> c6aec5a9533994a197686de5a19a88e6f295d84a
 	EnableItem(SAVE_AS, is_host);
 	EnableItem(GENERATE_MAP, false);
 
