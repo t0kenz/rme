@@ -18,12 +18,14 @@
 // $Id: common.hpp 264 2009-10-05 06:36:21Z remere $
 
 #include "main.h"
+#include "math.h"
 
 #include "common.h"
-#include "math.h"
 
 #include <sstream>
 #include <random>
+
+#include <regex>
 
 // random generator
 std::mt19937& getRandomGenerator()
@@ -200,44 +202,51 @@ std::string wstring2string(const std::wstring& widestring)
 
 bool posFromClipboard(int& x, int& y, int& z)
 {
-	bool done = false;
-
-	if(wxTheClipboard->Open()) {
-		if(wxTheClipboard->IsSupported(wxDF_TEXT)) {
-			std::vector<int> values;
-			wxTextDataObject data;
-			wxTheClipboard->GetData(data);
-			wxString text = data.GetText();
-
-			if(text.size() < 50) {
-				bool r = false;
-				wxString sv;
-
-				for(size_t s = 0; s < text.size(); ++s) {
-					if(text[s] >= '0' && text[s] <= '9') {
-						sv << text[s];
-						r = true;
-					} else if(r) {
-						values.push_back(ws2i(sv));
-						sv.Clear();
-						r = false;
-
-						if(values.size() >= 3)
-							break;
-					}
-				}
-			}
-
-			if(values.size() == 3) {
-				x = values[0];
-				y = values[1];
-				z = values[2];
-				done = true;
-			}
-		}
+	if (!wxTheClipboard->Open()) {
 		wxTheClipboard->Close();
+		return false;
 	}
-	return done;
+
+	if (!wxTheClipboard->IsSupported(wxDF_TEXT)) {
+		wxTheClipboard->Close();
+		return false;
+	}
+
+	std::vector<int> positions;
+
+	wxTextDataObject data;
+	wxTheClipboard->GetData(data);
+	
+	std::string txt = std::string(data.GetText().mb_str());
+
+	// this regex matches strings like "127, 0, 7" and "{x = 127, y = 0, z = 7}"
+	std::regex re("(\\d+),[A-Za-z= ]*(\\d+),[A-Za-z= ]*(\\d+)");
+
+	std::smatch matches;
+
+	if (!std::regex_search(txt, matches, re)) {
+		wxTheClipboard->Close();
+		return false;
+	}
+	
+	// matches.size() -1 because we're only interested in the capture groups, not the full match
+	if ((matches.size() -1) != 3) {
+		wxTheClipboard->Close();
+		return false;
+	}
+
+	// start from 1 to exclude the full match and iterate over the matches we intended to catch with our regex
+	for (size_t i = 1; i < matches.size(); i++) {
+		positions.push_back(std::stoi(matches[i]));
+	}
+
+	x = positions[0];
+	y = positions[1];
+	z = positions[2];
+
+	wxTheClipboard->Close();
+
+	return true;
 }
 
 wxString b2yn(bool v)

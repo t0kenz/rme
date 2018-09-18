@@ -59,11 +59,15 @@ MainMenuBar::MainMenuBar(MainFrame *frame) : frame(frame)
 	MAKE_ACTION(NEW, wxITEM_NORMAL, OnNew);
 	MAKE_ACTION(OPEN, wxITEM_NORMAL, OnOpen);
 	MAKE_ACTION(SAVE, wxITEM_NORMAL, OnSave);
+<<<<<<< HEAD
 	
 	MAKE_ACTION(SAVE_MAP, wxITEM_NORMAL, OnSaveMap);
 	MAKE_ACTION(SAVE_SPAWNS, wxITEM_NORMAL, OnSaveSpawns);
 	MAKE_ACTION(SAVE_HOUSES, wxITEM_NORMAL, OnSaveHouses);
 
+=======
+	//MAKE_ACTION(SAVE_SPAWNS, wxITEM_NORMAL, OnSaveSpawns);
+>>>>>>> c6aec5a9533994a197686de5a19a88e6f295d84a
 	MAKE_ACTION(SAVE_AS, wxITEM_NORMAL, OnSaveAs);
 	MAKE_ACTION(GENERATE_MAP, wxITEM_NORMAL, OnGenerateMap);
 	MAKE_ACTION(CLOSE, wxITEM_NORMAL, OnClose);
@@ -105,6 +109,7 @@ MainMenuBar::MainMenuBar(MainFrame *frame) : frame(frame)
 	MAKE_ACTION(RANDOMIZE_MAP, wxITEM_NORMAL, OnRandomizeMap);
 	MAKE_ACTION(GOTO_PREVIOUS_POSITION, wxITEM_NORMAL, OnGotoPreviousPosition);
 	MAKE_ACTION(GOTO_POSITION, wxITEM_NORMAL, OnGotoPosition);
+	MAKE_ACTION(JUMP_TO_POSITION, wxITEM_NORMAL, OnJumpToPosition);
 	MAKE_ACTION(JUMP_TO_BRUSH, wxITEM_NORMAL, OnJumpToBrush);
 	MAKE_ACTION(JUMP_TO_ITEM_BRUSH, wxITEM_NORMAL, OnJumpToItemBrush);
 
@@ -296,11 +301,15 @@ void MainMenuBar::Update()
 
 	EnableItem(CLOSE, is_local);
 	EnableItem(SAVE, is_host);
+<<<<<<< HEAD
 	
 	EnableItem(SAVE_MAP, is_local);
 	EnableItem(SAVE_SPAWNS, is_local);
 	EnableItem(SAVE_HOUSES, is_local);
 
+=======
+	//EnableItem(SAVE_SPAWNS, is_host);
+>>>>>>> c6aec5a9533994a197686de5a19a88e6f295d84a
 	EnableItem(SAVE_AS, is_host);
 	EnableItem(GENERATE_MAP, false);
 
@@ -332,6 +341,7 @@ void MainMenuBar::Update()
 
 	EnableItem(GOTO_PREVIOUS_POSITION, has_map);
 	EnableItem(GOTO_POSITION, has_map);
+	EnableItem(JUMP_TO_POSITION, has_map);
 	EnableItem(JUMP_TO_BRUSH, loaded);
 	EnableItem(JUMP_TO_ITEM_BRUSH, loaded);
 
@@ -489,7 +499,7 @@ bool MainMenuBar::Load(const FileName& path, wxArrayString& warnings, wxString& 
 	}
 
 #ifdef __LINUX__
-	const int count = 41;
+	const int count = 42;
 	wxAcceleratorEntry entries[count];
 	// Edit
 	entries[0].Set(wxACCEL_CTRL, (int)'Z', MAIN_FRAME_MENU + MenuBar::UNDO);
@@ -500,10 +510,11 @@ bool MainMenuBar::Load(const FileName& path, wxArrayString& warnings, wxString& 
 	entries[5].Set(wxACCEL_CTRL, (int)'B', MAIN_FRAME_MENU + MenuBar::BORDERIZE_SELECTION);
 	entries[6].Set(wxACCEL_NORMAL, (int)'P', MAIN_FRAME_MENU + MenuBar::GOTO_PREVIOUS_POSITION);
 	entries[7].Set(wxACCEL_CTRL, (int)'G', MAIN_FRAME_MENU + MenuBar::GOTO_POSITION);
-	entries[8].Set(wxACCEL_NORMAL, (int)'J', MAIN_FRAME_MENU + MenuBar::JUMP_TO_BRUSH);
-	entries[9].Set(wxACCEL_CTRL, (int)'X', MAIN_FRAME_MENU + MenuBar::CUT);
-	entries[10].Set(wxACCEL_CTRL, (int)'C', MAIN_FRAME_MENU + MenuBar::COPY);
-	entries[11].Set(wxACCEL_CTRL, (int)'V', MAIN_FRAME_MENU + MenuBar::PASTE);
+	entries[8].Set(wxACCEL_CTRL | wxACCEL_SHIFT, (int)'V', MAIN_FRAME_MENU + MenuBar::JUMP_TO_POSITION);
+	entries[9].Set(wxACCEL_NORMAL, (int)'J', MAIN_FRAME_MENU + MenuBar::JUMP_TO_BRUSH);
+	entries[10].Set(wxACCEL_CTRL, (int)'X', MAIN_FRAME_MENU + MenuBar::CUT);
+	entries[11].Set(wxACCEL_CTRL, (int)'C', MAIN_FRAME_MENU + MenuBar::COPY);
+	entries[12].Set(wxACCEL_CTRL, (int)'V', MAIN_FRAME_MENU + MenuBar::PASTE);
 	// View
 	entries[12].Set(wxACCEL_CTRL, (int)'=', MAIN_FRAME_MENU + MenuBar::ZOOM_IN);
 	entries[13].Set(wxACCEL_CTRL, (int)'-', MAIN_FRAME_MENU + MenuBar::ZOOM_OUT);
@@ -1218,6 +1229,19 @@ void MainMenuBar::OnGotoPosition(wxCommandEvent& WXUNUSED(event))
 	// Display dialog, it also controls the actual jump
 	GotoPositionDialog dlg(frame, *g_gui.GetCurrentEditor());
 	dlg.ShowModal();
+}
+
+void MainMenuBar::OnJumpToPosition(wxCommandEvent& WXUNUSED(event))
+{
+	if (!g_gui.IsEditorOpen()) {
+		return;
+	}
+
+	Position pos;
+
+	if (posFromClipboard(pos.x, pos.y, pos.z)) {
+		g_gui.SetScreenCenterPosition(pos);
+	}
 }
 
 namespace OnMapRemoveItems
