@@ -1260,6 +1260,52 @@ bool IOMapOTBM::saveMap(Map& map, const FileName& identifier)
 	return true;
 }
 
+bool IOMapOTBM::saveSoloSpawns(Map& map, const FileName& identifier)
+{
+#ifdef OTGZ_SUPPORT
+	struct archive* a = archive_write_new();
+	struct archive_entry* entry = archive_entry_new();
+	std::ostringstream streamData;
+
+	g_gui.setLoadDone(0, "Saving Spawns...");
+
+	archive_write_set_compression_gzip(a);
+	archive_write_set_format_pax_restricted(a);
+	archive_write_open_filename(a, nstr(identifier.GetFullPath()).c_str());
+
+	pugi::xml_document spawnDoc;
+	if(!saveSpawns(map, spawnDoc))
+		return false;
+	
+	// Write the data
+	spawnDoc.save(streamData, "", pugi::format_raw, pugi::encoding_utf8);
+	std::string xmlData = streamData.str();
+
+	// Write to the archive
+	archive_entry_set_pathname(entry, "world/spawns.xml");
+	archive_entry_set_size(entry, xmlData.size());
+	archive_entry_set_filetype(entry, AE_IFREG);
+	archive_entry_set_perm(entry, 0644);
+
+	// Write to the archive
+	archive_write_header(a, entry);
+	archive_write_data(a, xmlData.data(), xmlData.size());
+
+	// Free the entry
+	archive_entry_free(entry);
+	archive_write_close(a);
+	archive_write_free(a);
+
+	g_gui.DestroyLoadBar();
+	return true;
+#endif
+	if(!saveSpawns(map, identifier))
+		return false;
+
+	g_gui.SetLoadDone(99, "Saving spawns...");
+	return true;
+}
+
 bool IOMapOTBM::saveMap(Map& map, NodeFileWriteHandle& f)
 {
 	/* STOP!

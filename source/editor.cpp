@@ -339,6 +339,130 @@ void Editor::saveMap(FileName filename, bool showdialog)
 	map.clearChanges();
 }
 
+void Editor::saveSoloSpawns(FileName filename, bool showdialog)
+{
+	std::string savefile = filename.GetFullPath().mb_str(wxConvUTF8).data();
+	bool save_as = false;
+
+	if(savefile.empty()) {
+		savefile = map.filename;
+
+		FileName c1(wxstr(savefile));
+		FileName c2(wxstr(map.filename));
+		save_as = c1 != c2;
+	}
+
+	// If not named yet, propagate the file name to the auxilliary files
+	if(map.unnamed) {
+		FileName _name(filename);
+		_name.SetExt("xml");
+
+		_name.SetName(filename.GetName() + "-spawn");
+		map.spawnfile = nstr(_name.GetFullName());
+
+		map.unnamed = false;
+	}
+
+	// File object to convert between local paths etc.
+	FileName converter;
+	converter.Assign(wxstr(savefile));
+	std::string map_path = nstr(converter.GetPath(wxPATH_GET_SEPARATOR | wxPATH_GET_VOLUME));
+
+	// Make temporary backups
+	//converter.Assign(wxstr(savefile));
+	std::string backup_spawn;
+
+/*	if(converter.GetExt() == "otgz") {
+		save_otgz = true;
+		if(converter.FileExists()) {
+			backup_otbm = map_path + nstr(converter.GetName()) + ".otgz~";
+			std::remove(backup_otbm.c_str());
+			std::rename(savefile.c_str(), backup_otbm.c_str());
+		}
+	} else {
+*/
+	converter.SetFullName(wxstr(map.spawnfile));
+	if(converter.FileExists()) {
+		backup_spawn = map_path + nstr(converter.GetName()) + ".xml~";
+		std::remove(backup_spawn.c_str());
+		std::rename((map_path + map.spawnfile).c_str(), backup_spawn.c_str());
+	}
+
+	{
+		// Set up the Map paths
+		wxFileName fn = wxstr(savefile);
+		map.filename = fn.GetFullPath().mb_str(wxConvUTF8);
+		map.name = fn.GetFullName().mb_str(wxConvUTF8);
+
+		if(showdialog)
+			g_gui.CreateLoadBar("Saving OTBM map...");
+
+		IOMapOTBM saver(map.getVersion());
+		bool success = saver.saveSoloSpawns(map, fn);
+
+		// Perform the actual save
+		/*IOMapOTBM mapsaver(map.getVersion());
+		bool success = mapsaver.saveMap(map, fn);*/
+
+		if(showdialog)
+			g_gui.DestroyLoadBar();
+
+		// Check for errors...
+		if(!success) {
+			// Rename the temporary backup files back to their previous names
+			if(!backup_spawn.empty()) {
+				converter.SetFullName(wxstr(map.spawnfile));
+				std::string spawn_filename = map_path + nstr(converter.GetName());
+				std::rename(backup_spawn.c_str(), std::string(spawn_filename + ".xml").c_str());
+			}
+
+			// Display the error
+			g_gui.PopupDialog("Error", "Could not save, unable to open target for writing.", wxOK);
+		}
+
+		// Remove temporary save runfile
+		{
+			std::string n = nstr(g_gui.GetLocalDataDirectory()) + ".saving.txt";
+			std::remove(n.c_str());
+		}
+
+		// If failure, don't run the rest of the function
+		if(!success)
+			return;
+	}
+
+	// Move to permanent backup
+	if(!save_as && g_settings.getInteger(Config::ALWAYS_MAKE_BACKUP)) {
+		// Move temporary backups to their proper files
+		time_t t = time(nullptr);
+		tm* current_time = localtime(&t);
+		ASSERT(current_time);
+
+		std::ostringstream date;
+		date << (1900 + current_time->tm_year);
+		if(current_time->tm_mon < 9)
+			date << "-" << "0" << current_time->tm_mon+1;
+		else
+			date << "-" << current_time->tm_mon+1;
+		date << "-" << current_time->tm_mday;
+		date << "-" << current_time->tm_hour;
+		date << "-" << current_time->tm_min;
+		date << "-" << current_time->tm_sec;
+
+		if(!backup_spawn.empty()) {
+			converter.SetFullName(wxstr(map.spawnfile));
+			std::string spawn_filename = map_path + nstr(converter.GetName());
+			std::rename(backup_spawn.c_str(), std::string(spawn_filename + "." + date.str() + ".xml").c_str());
+		}
+	} else {
+		// Delete the temporary files
+		std::remove(backup_spawn.c_str());
+	}
+
+	map.spawns.clearChanges();
+}
+
+
 
 
 bool Editor::importMiniMap(FileName filename, int import, int import_x_offset, int import_y_offset, int import_z_offset)

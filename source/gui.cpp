@@ -460,6 +460,11 @@ void GUI::SaveCurrentMap(FileName filename, bool showdialog)
 	root->Refresh();
 }
 
+void GUI:saveSpawns()
+{
+	
+}
+
 bool GUI::IsEditorOpen() const
 {
 	return tabbook != nullptr && GetCurrentMapTab();

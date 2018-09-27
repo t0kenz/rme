@@ -139,6 +139,7 @@ protected:
 	bool loadHouses(Map& map, pugi::xml_document& doc);
 
 	virtual bool saveMap(Map& map, NodeFileWriteHandle& handle);
+	bool saveSoloSpawns(Map& map, const FileName& identifier);
 	bool saveSpawns(Map& map, const FileName& dir);
 	bool saveSpawns(Map& map, pugi::xml_document& doc);
 	bool saveHouses(Map& map, const FileName& dir);

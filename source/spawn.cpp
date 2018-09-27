@@ -60,3 +60,15 @@ std::ostream& operator<<(std::ostream& os, const Spawn& spawn) {
 	os << &spawn << ":: -> " << spawn.getSize() << std::endl;
 	return os;
 }
+
+Spawns::hasChanged() const
+{
+	return has_changed;
+}
+
+Spawns::clearChanges()
+{
+	bool doupdate = has_changed;
+	has_changed = false;
+	return doupdate;
+}

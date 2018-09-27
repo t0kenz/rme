@@ -61,15 +61,20 @@ public:
 
 	void addSpawn(Tile* tile);
 	void removeSpawn(Tile* tile);
-
+	
 	SpawnPositionList::iterator begin() {return spawns.begin();}
 	SpawnPositionList::const_iterator begin() const {return spawns.begin();}
 	SpawnPositionList::iterator end() {return spawns.end();}
 	SpawnPositionList::const_iterator end() const {return spawns.end();}
 	void erase(SpawnPositionList::iterator iter) {spawns.erase(iter);}
 	SpawnPositionList::iterator find(Position& pos) {return spawns.find(pos);}
+
+	bool clearChanges();
+	bool hasChanged() const;
+
 private:
 	SpawnPositionList spawns;
+	bool has_changed;
 };
 
 

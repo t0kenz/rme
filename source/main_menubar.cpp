@@ -700,6 +700,7 @@ void MainMenuBar::OnSave(wxCommandEvent& WXUNUSED(event))
 		return;
 
 	if(g_gui.GetCurrentMap().hasFile()) {
+		std::cout << "test \n";
 		g_gui.SaveCurrentMap(true);
 	} else {
 		wxString wildcard = (g_settings.getInteger(Config::USE_OTGZ) != 0 ? MAP_SAVE_FILE_WILDCARD_OTGZ : MAP_SAVE_FILE_WILDCARD);
